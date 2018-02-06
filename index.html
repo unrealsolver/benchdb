@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+  <link rel="stylesheet" href="side-menu.css">
+  <title>Perf DB</title>
+
+<style>
+  .chart-line {
+    fill: none;
+    stroke-width: 2;
+  }
+  
+  .fps-line {
+    stroke-width: 1;
+    stroke: lightgray;
+  }
+</style>
+</head>
+<body>
+
+
+
+<div id="layout" ng-app="App" class="ng-cloak">
+    <!-- Menu toggle -->
+    <a href="#menu" id="menuLink" class="menu-link">
+        <!-- Hamburger icon -->
+        <span></span>
+    </a>
+
+    <div id="menu">
+        <div class="pure-menu">
+            <a class="pure-menu-heading" href="#">Perf DB</a>
+
+            <ul class="pure-menu-list">
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link">Home</a></li>
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link">About</a></li>
+
+                <li class="pure-menu-item menu-item-divided pure-menu-selected">
+                    <a href="#" class="pure-menu-link">Services</a>
+                </li>
+
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div id="main" ng-controller="MainCtrl as $ctrl">
+        <div class="header">
+            <h1>Better Performance Analysis</h1>
+            <h2>Record frametime CSV with Fraps and upload the file</h2>
+        </div>
+
+        <div class="content">
+          <div>          
+            <h2 class="content-subhead">Upload CSV</h2>
+            <button class="pure-button" ng-click="$ctrl.selectFile()">Select File</button>
+            <input onchange="angular.element(this).scope().$ctrl.onFileChange(this)" class="csv-file-input" type="file" style="display: none" />
+          </div>
+          <div ng-if="$ctrl.isProcessed">
+            <fps-chart data="$ctrl.chartData"></fps-chart>
+            <table class="pure-table pure-table-horizontal">
+              <tbody>
+                <tr ng-repeat="item in $ctrl.stats">
+                  <td>{{item[0]}}</td>
+                  <td>{{item[1] | number : 0}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.5/lodash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js"></script>
+<script src="app.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js"></script>
+<script src="https://d3js.org/d3-axis.v1.min.js"></script>
+<script src="https://d3js.org/d3-selection-multi.v1.min.js"></script>
+
+</body>
+</html>
