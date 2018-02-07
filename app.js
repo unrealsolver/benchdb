@@ -137,7 +137,7 @@ app.directive('fpsChart', function() { return {
       HEIGHT: 500,
       margin: {
         top: 10,
-        left: 40,
+        left: 46,
         bottom: 40,
         right: 10
       },
@@ -199,6 +199,26 @@ app.directive('fpsChart', function() { return {
       }).fps[0]
     }
     
+    // Draw axis labels
+    svg.append('g')
+      .attr('transform', d3Translate(15, cfg.margin.top + cfg.effectiveHeight / 2))
+      .append('text')
+      .attrs({
+        x: 0,
+        y: 0,
+        transform: 'rotate(-90)',
+        'text-anchor': 'middle',
+      })
+      .text('FPS')
+
+      svg.append('text')
+      .attrs({
+        x: cfg.margin.left + cfg.effectiveWidth / 2,
+        y: cfg.HEIGHT - cfg.margin.bottom + 35,
+        'text-anchor': 'middle',
+      })
+      .text('Time')
+
     function redraw(data) {
       samples = data['100']
       xScale.domain([0, getMaxX(data)])
