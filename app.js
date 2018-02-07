@@ -5,8 +5,8 @@ function d3Translate(x, y) {
 }
 
 function msToTime(millis) {
-  var minutes = Math.floor(millis / 6000)
-  var seconds = ((millis % 6000) / 100).toFixed(0)
+  var minutes = Math.floor(millis / 60000)
+  var seconds = ((millis % 60000) / 1000).toFixed(0)
   return minutes + ":" + (seconds < 10 ? '0' : '') + seconds
 }
 
