@@ -262,14 +262,18 @@ app.directive('fpsChart', function() { return {
       drawPath('q97-line', q97Line, samples)
       drawPath('q03-line', q03Line, samples)
 
-      chartG.selectAll('line.fps-line')
+      var tickLines = chartG.selectAll('line.fps-line')
         .data([60, 120])
-        .enter()
+
+      tickLines.enter()
         .append('line')
         .attrs({
           class: 'fps-line',
           x1: 0,
           x2: cfg.effectiveWidth,
+        })
+        .merge(tickLines)
+        .attrs({
           y1: yScale,
           y2: yScale,
         })
