@@ -219,6 +219,28 @@ app.directive('fpsChart', function() { return {
       })
       .text('Time')
 
+    var xAxisG = svg.append('g')
+      .attr('class', 'x-axis')
+
+    var yAxisG = svg.append('g')
+        .attr('class', 'y-axis')
+
+    function drawPath(klass, line, samples) {
+      var path = chartG.selectAll('path.' + klass)
+        .data([samples])
+
+      path.enter()
+        .append('path')
+        .attrs({
+          class: 'chart-line ' + klass,
+          stroke: 'black',
+        })
+        .merge(path)
+        .attr('d', line)
+        .exit()
+        .remove()
+    }
+
     function redraw(data) {
       samples = data['100']
       xScale.domain([0, getMaxX(data)])
@@ -228,36 +250,18 @@ app.directive('fpsChart', function() { return {
         .tickFormat(msToTime)
       var yAxis = d3.axisLeft(yScale)
 
-      svg.append('g')
+      xAxisG
         .attr('transform', d3Translate(cfg.margin.left, cfg.HEIGHT - cfg.margin.bottom))
         .call(xAxis)
-        
-      svg.append('g')
+
+      yAxisG
         .attr('transform', d3Translate(cfg.margin.left, cfg.margin.top))
         .call(yAxis)
-      
-      chartG.append('path')
-        .attrs({
-          d: meanLine(samples),
-          class: 'chart-line',
-          stroke: 'black',
-        })
-        
-      chartG.append('path')
-        .attrs({
-          d: q97Line(samples),
-          class: 'chart-line',
-          stroke: 'green',
-        })
-        
-      chartG.append('path')
-        .attrs({
-          d: q03Line(samples),
-          class: 'chart-line',
-          stroke: 'red',
-        })
-        
-      
+
+      drawPath('mean-line', meanLine, samples)
+      drawPath('q97-line', q97Line, samples)
+      drawPath('q03-line', q03Line, samples)
+
       chartG.selectAll('line.fps-line')
         .data([60, 120])
         .enter()
@@ -271,7 +275,7 @@ app.directive('fpsChart', function() { return {
         })
       }
 
-    $scope.$watch('data', function(old, data) {
+    $scope.$watch('data', function(data) {
       redraw(data)
     })
   }
